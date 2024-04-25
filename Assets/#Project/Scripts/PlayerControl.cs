@@ -12,7 +12,8 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] float turnSpeed = 180;
     [SerializeField] float sprintSpeed = 5;
     InputActionMap actions;
-    InputAction move, sprint;
+    InputAction move, sprint, torch;
+    Light light;
     LayerMask ground;
     
     void Awake()
@@ -20,9 +21,15 @@ public class PlayerControl : MonoBehaviour
         actions = actionAsset.FindActionMap("Gameplay");
         move = actions.FindAction("Move");
         sprint = actions.FindAction("Sprint");
+        torch = actions.FindAction("Torch");
+        torch.performed += ctx => Torch(ctx);
+        light = gameObject.GetComponent<Light>();
         ground = LayerMask.GetMask("Ground");
     }
 
+    private void Torch(InputAction.CallbackContext ctx) {
+        light.enabled = !light.enabled;
+    }
 
     private void Update() {
         Move();
@@ -46,7 +53,6 @@ public class PlayerControl : MonoBehaviour
             if (angle < 2 * turnSpeed * Time.deltaTime && angle > -2 * turnSpeed * Time.deltaTime) {
                 transform.forward = new Vector3(targetDirection.x, 0, targetDirection.y).normalized;
             } else {
-
                 transform.forward = new Vector3(currentDirection.x, 0, currentDirection.y).normalized;
                 transform.Rotate((angle > 0 ? 1 : -1) * new Vector3(0, turnSpeed * Time.deltaTime, 0), Space.Self);
             }

@@ -10,7 +10,7 @@ public class Guard : MonoBehaviour {
     
 
     public GuardStateMachine StateMachine {  get; private set; }
-    public Transform[] waypoints;
+    public Transform waypoints;
     [SerializeField] public Transform target;
     public float timeToLoseTarget = 5f;
     [SerializeField] float distanceView = 20f;
@@ -23,12 +23,11 @@ public class Guard : MonoBehaviour {
         Agent = GetComponent<NavMeshAgent>();
         Torch = GetComponent<Light>();
         Torch.type = LightType.Spot;
-        Torch.color = Color.red;
         Torch.intensity = lightIntensity;
         Torch.range = distanceView;
         Torch.spotAngle = angleVision;
         Torch.innerSpotAngle = angleVision;
-        Torch.enabled = false;
+        Torch.shadows = LightShadows.Soft;
         StateMachine = new GuardStateMachine(this);
         StateMachine.Init(StateMachine.patrolState);
     }

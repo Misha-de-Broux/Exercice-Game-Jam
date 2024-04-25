@@ -24,7 +24,6 @@ public class HuntState : IState
 
     public void Exit() {
         Debug.Log("Exit HuntState");
-        guard.Torch.enabled = false;
     }
 
     public void Peform() {
@@ -42,6 +41,6 @@ public class HuntState : IState
     public void Enter() {
         Debug.Log("Enter HuntState");
         timeSinceTargetSeen = 0;
-        guard.Torch.enabled = true;
+        guard.Torch.color = Color.red;
     }
 }

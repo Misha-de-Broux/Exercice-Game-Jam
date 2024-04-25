@@ -9,10 +9,12 @@ public class GuardStateMachine {
 
     public HuntState huntState;
     public PatrolState patrolState;
+    public SuspectState suspectState;
 
     public GuardStateMachine(Guard guard) {
         huntState = new HuntState(guard, this);
         patrolState = new PatrolState(guard, this);
+        suspectState = new SuspectState(guard, this);
     }
 
     public void Init(IState startingState) {
