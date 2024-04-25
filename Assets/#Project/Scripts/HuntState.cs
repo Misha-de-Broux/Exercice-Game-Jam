@@ -8,10 +8,11 @@ public class HuntState : IState
 {
     Transform target;
     NavMeshAgent agent;
-    float timeToLoseTarget = 5f;
+    float timeToLoseTarget;
     float timeSinceTargetSeen;
     Guard guard;
     GuardStateMachine stateMachine;
+    float defaultSpeed;
 
     public HuntState(Guard guard, GuardStateMachine stateMachine) {
         this.target = guard.target;
@@ -20,10 +21,12 @@ public class HuntState : IState
         this.guard = guard;
         this.stateMachine = stateMachine;
         timeSinceTargetSeen = 0;
+        defaultSpeed = agent.speed;
     }
 
     public void Exit() {
         Debug.Log("Exit HuntState");
+        agent.speed = defaultSpeed;
     }
 
     public void Peform() {
@@ -41,6 +44,7 @@ public class HuntState : IState
     public void Enter() {
         Debug.Log("Enter HuntState");
         timeSinceTargetSeen = 0;
+        agent.speed = 1.5f * defaultSpeed;
         guard.Torch.color = Color.red;
     }
 }
