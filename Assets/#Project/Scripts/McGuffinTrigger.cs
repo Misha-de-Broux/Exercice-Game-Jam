@@ -19,7 +19,7 @@ public class McGuffinTrigger : MonoBehaviour
             if(timeIn > timeToSteal) {
                 if(mcGuffin != null) {
                     mcGuffin.SetParent(other.transform);
-                    int mcGuffinAmount = other.GetComponent<PlayerObjectives>().mcGuffinAmount++;
+                    int mcGuffinAmount = other.GetComponent<PlayerObjectives>().AddMcGuffin();
                     mcGuffin.transform.localPosition = new Vector3(0.4f + mcGuffinAmount * 0.1f, mcGuffinAmount * 0.4f, -0.4f + mcGuffinAmount * 0.1f);
                     
                     mcGuffin = null;

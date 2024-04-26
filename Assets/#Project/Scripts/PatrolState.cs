@@ -34,6 +34,9 @@ public class PatrolState : IState
         } else if (guard.BaitedBy != null) {
             stateMachine.TransitionTo(stateMachine.baitedState);
         } else if (IsAtDestination) {
+            if (guard.actRandom) {
+                index = UnityEngine.Random.Range(0, waypoints.childCount);
+            }
             index++;
             SelectDestination();
         }

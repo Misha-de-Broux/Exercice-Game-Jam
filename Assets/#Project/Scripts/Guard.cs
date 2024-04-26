@@ -6,16 +6,14 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Light))]
 public class Guard : MonoBehaviour {
-
-
-
     public GuardStateMachine StateMachine { get; private set; }
     public Transform waypoints;
-    [SerializeField] public Transform target;
+    public Transform target;
     public float timeToLoseTarget = 5f;
     [SerializeField] float distanceView = 20f;
     [SerializeField] float angleVision = 90f;
     [SerializeField] float lightIntensity = 50f;
+    public bool actRandom = false;
     private GameObject _baitedBy;
     public GameObject BaitedBy {
         get { return _baitedBy; }
@@ -25,6 +23,9 @@ public class Guard : MonoBehaviour {
     public NavMeshAgent Agent { get; private set; }
     // Start is called before the first frame update
     void Start() {
+        if(target == null) {
+            target = GameObject.FindWithTag("Player").transform;
+        }
         Agent = GetComponent<NavMeshAgent>();
         Torch = GetComponent<Light>();
         Torch.type = LightType.Spot;

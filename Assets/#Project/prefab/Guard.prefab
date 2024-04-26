@@ -148,9 +148,10 @@ MonoBehaviour:
   waypoints: {fileID: 0}
   target: {fileID: 0}
   timeToLoseTarget: 5
-  distanceView: 20
+  distanceView: 15
   angleVision: 90
-  lightIntensity: 50
+  lightIntensity: 100
+  actRandom: 0
 --- !u!108 &1443883595194567393
 Light:
   m_ObjectHideFlags: 0

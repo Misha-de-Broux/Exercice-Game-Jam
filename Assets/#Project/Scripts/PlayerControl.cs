@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerControl : MonoBehaviour
@@ -45,6 +46,7 @@ public class PlayerControl : MonoBehaviour
     private void Update() {
         Move();
         Turn();
+        transform.forward = new Vector3(transform.forward.x, 0, transform.forward.z).normalized;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
@@ -64,7 +66,6 @@ public class PlayerControl : MonoBehaviour
             if (angle < 2 * turnSpeed * Time.deltaTime && angle > -2 * turnSpeed * Time.deltaTime) {
                 transform.forward = new Vector3(targetDirection.x, 0, targetDirection.y).normalized;
             } else {
-                transform.forward = new Vector3(currentDirection.x, 0, currentDirection.y).normalized;
                 transform.Rotate((angle > 0 ? 1 : -1) * new Vector3(0, turnSpeed * Time.deltaTime, 0), Space.Self);
             }
         }
