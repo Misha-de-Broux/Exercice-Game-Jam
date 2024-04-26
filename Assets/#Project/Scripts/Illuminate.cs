@@ -12,15 +12,14 @@ public class Illuminate : MonoBehaviour
         light = GetComponent<Light>();
     }
     public bool CastLight(Transform target) {
+        RaycastHit hit;
+        Vector3 direction = (target.position - transform.position).normalized;
         if (light.enabled) {
-            Vector3 direction = (target.position - transform.position).normalized;
-            RaycastHit hit;
             if (Vector3.Angle(transform.forward, direction) < light.spotAngle / 2 && Physics.Raycast(transform.position, direction, out hit, light.range)) {
                 if (hit.collider.transform == target) {
                     return true;
                 }
             }
-            return false;
         }
         return false ;
     }
