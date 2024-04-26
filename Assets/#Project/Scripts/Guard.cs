@@ -4,19 +4,24 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-[RequireComponent (typeof(Light))]
+[RequireComponent(typeof(Light))]
 public class Guard : MonoBehaviour {
 
-    
 
-    public GuardStateMachine StateMachine {  get; private set; }
+
+    public GuardStateMachine StateMachine { get; private set; }
     public Transform waypoints;
     [SerializeField] public Transform target;
     public float timeToLoseTarget = 5f;
     [SerializeField] float distanceView = 20f;
     [SerializeField] float angleVision = 90f;
-    [SerializeField] float lightIntensity = 50f ;
-    public Light Torch {  get; private set; }
+    [SerializeField] float lightIntensity = 50f;
+    private GameObject _baitedBy;
+    public GameObject BaitedBy {
+        get { return _baitedBy; }
+        set { if (_baitedBy == null) _baitedBy = value; }
+    }
+    public Light Torch { get; private set; }
     public NavMeshAgent Agent { get; private set; }
     // Start is called before the first frame update
     void Start() {
@@ -28,6 +33,7 @@ public class Guard : MonoBehaviour {
         Torch.spotAngle = angleVision;
         Torch.innerSpotAngle = angleVision;
         Torch.shadows = LightShadows.Soft;
+        BaitedBy = null;
         StateMachine = new GuardStateMachine(this);
         StateMachine.Init(StateMachine.patrolState);
     }
@@ -47,5 +53,9 @@ public class Guard : MonoBehaviour {
             }
             return false;
         }
+    }
+
+    public void DestroyBait() {
+        Destroy(BaitedBy);
     }
 }

@@ -1,23 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SuspectState : IState
-{
-    Transform target;
+public class BaitedState : IState {
+    GameObject target;
     NavMeshAgent agent;
     Guard guard;
     GuardStateMachine stateMachine;
-    Func<bool> isIlluminate;
 
-    public SuspectState(Guard guard, GuardStateMachine stateMachine) {
-        this.target = guard.target;
+    public BaitedState(Guard guard, GuardStateMachine stateMachine) {
         this.agent = guard.Agent;
         this.guard = guard;
         this.stateMachine = stateMachine;
-        isIlluminate = () => guard.target.GetComponent<Illuminate>().CastLight(guard.transform);
     }
 
     public void Exit() {
@@ -25,18 +22,25 @@ public class SuspectState : IState
     }
 
     public void Peform() {
-        agent.SetDestination(target.position);
         if (guard.SeeTarget) {
             stateMachine.TransitionTo(stateMachine.huntState);
-        } else if (!isIlluminate()) { 
+        } else if (target != null) {
+            agent.SetDestination(target.transform.position);
+            if (IsAtDestination) {
+                guard.DestroyBait();
+            }
+        } else {
             stateMachine.TransitionTo(stateMachine.patrolState);
-        } else if (guard.BaitedBy != null) {
-            stateMachine.TransitionTo(stateMachine.baitedState);
         }
     }
 
     public void Enter() {
         Debug.Log("Enter SuspectState");
-        guard.Torch.color = Color.blue;
+        target = guard.BaitedBy;
+        guard.Torch.color = Color.magenta;
+    }
+
+    private bool IsAtDestination {
+        get { return agent.remainingDistance <= agent.stoppingDistance; }
     }
 }

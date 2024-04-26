@@ -11,8 +11,10 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] float walkSpeed = 2;
     [SerializeField] float turnSpeed = 180;
     [SerializeField] float sprintSpeed = 5;
+    [SerializeField] int decoyAmount = 2;
+    [SerializeField] GameObject decoyType;
     InputActionMap actions;
-    InputAction move, sprint, torch;
+    InputAction move, sprint, torch, decoy;
     Light light;
     LayerMask ground;
     
@@ -23,8 +25,17 @@ public class PlayerControl : MonoBehaviour
         sprint = actions.FindAction("Sprint");
         torch = actions.FindAction("Torch");
         torch.performed += ctx => Torch(ctx);
+        decoy = actions.FindAction("Decoy");
+        decoy.performed += ctx => Decoy(ctx);
         light = gameObject.GetComponent<Light>();
         ground = LayerMask.GetMask("Ground");
+    }
+
+    private void Decoy(InputAction.CallbackContext ctx) {
+        if (decoyAmount > 0) {
+            decoyAmount--;
+            Instantiate(decoyType, transform.position, transform.rotation);
+        }
     }
 
     private void Torch(InputAction.CallbackContext ctx) {

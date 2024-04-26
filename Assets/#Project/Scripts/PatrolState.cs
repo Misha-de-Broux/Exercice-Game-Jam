@@ -12,14 +12,14 @@ public class PatrolState : IState
     Transform target;
     Guard guard;
     GuardStateMachine stateMachine;
-    Func<Transform, bool> isIlluminate;
+    Func<bool> isIlluminate;
 
     public PatrolState(Guard guard, GuardStateMachine stateMachine) {
         this.agent = guard.Agent;
         this.waypoints = guard.waypoints;
         this.guard = guard;
         this.stateMachine = stateMachine;
-        isIlluminate = guard.target.GetComponent<Illuminate>().CastLight;
+        isIlluminate = () => guard.target.GetComponent<Illuminate>().CastLight(guard.transform);
     }
 
     public void Exit() {
@@ -29,8 +29,10 @@ public class PatrolState : IState
     public void Peform() {
         if (guard.SeeTarget) {
             stateMachine.TransitionTo(stateMachine.huntState);
-        } else if (isIlluminate(guard.transform)) {
+        } else if (isIlluminate()) {
             stateMachine.TransitionTo(stateMachine.suspectState);
+        } else if (guard.BaitedBy != null) {
+            stateMachine.TransitionTo(stateMachine.baitedState);
         } else if (IsAtDestination) {
             index++;
             SelectDestination();
