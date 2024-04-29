@@ -18,7 +18,10 @@ public class BaitedState : IState {
     }
 
     public void Exit() {
-        Debug.Log("Exit SuspectState");
+        Debug.Log("Exit SuspectState"); 
+        guard.Torch.range *= 2;
+        guard.Torch.spotAngle *= 2;
+        guard.Torch.innerSpotAngle *= 2;
     }
 
     public void Peform() {
@@ -38,6 +41,9 @@ public class BaitedState : IState {
         Debug.Log("Enter SuspectState");
         target = guard.BaitedBy;
         guard.Torch.color = Color.magenta;
+        guard.Torch.range /= 2;
+        guard.Torch.innerSpotAngle /= 2;
+        guard.Torch.spotAngle /= 2;
     }
 
     private bool IsAtDestination {

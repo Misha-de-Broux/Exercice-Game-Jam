@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -13,14 +14,18 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] float turnSpeed = 180;
     [SerializeField] float sprintSpeed = 5;
     [SerializeField] int decoyAmount = 2;
+    int decoyLeft;
     [SerializeField] GameObject decoyType;
     InputActionMap actions;
     InputAction move, sprint, torch, decoy;
     Light light;
     LayerMask ground;
+    [SerializeField] TextMeshProUGUI display;
     
     void Awake()
     {
+        decoyLeft = decoyAmount;
+        display.text = $"{decoyLeft} / {decoyAmount}";
         actions = actionAsset.FindActionMap("Gameplay");
         move = actions.FindAction("Move");
         sprint = actions.FindAction("Sprint");
@@ -33,8 +38,9 @@ public class PlayerControl : MonoBehaviour
     }
 
     private void Decoy(InputAction.CallbackContext ctx) {
-        if (decoyAmount > 0) {
-            decoyAmount--;
+        if (decoyLeft > 0) {
+            decoyLeft--;
+            display.text = $"{decoyLeft} / {decoyAmount}";
             Instantiate(decoyType, transform.position, transform.rotation);
         }
     }

@@ -47,7 +47,7 @@ public class Guard : MonoBehaviour {
         get {
             Vector3 direction = (target.position - transform.position).normalized;
             RaycastHit hit;
-            if (Vector3.Angle(transform.forward, direction) < angleVision / 2 && Physics.Raycast(transform.position, direction, out hit, distanceView)) {
+            if (Vector3.Angle(transform.forward, direction) < Torch.spotAngle / 2 && Physics.Raycast(transform.position, direction, out hit, Torch.range)) {
                 if (hit.collider.transform == target) {
                     return true;
                 }
